@@ -1,185 +1,179 @@
-import React, { useState } from 'react';
-import { Slider } from "@/components/ui/slider";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Switch } from "@/components/ui/switch";
-import { Download, Code, Eye, Palette, Heart, Circle, Square, Star, Diamond, Layers, FolderHeart, MessageCircle, Plus, Trash2, FileArchive } from "lucide-react";
-import { toast } from 'sonner';
-import { Textarea } from "@/components/ui/textarea";
-import KawaiiEyes from './KawaiiEyes';
-import { KawaiiEyesProps } from './KawaiiEyesTypes';
-import JSZip from 'jszip';
+"use client"
+
+import type React from "react"
+import { useState } from "react"
+import { Slider } from "@/components/ui/slider"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Switch } from "@/components/ui/switch"
+import { Code, Heart, Circle, Square, Star, Diamond, MessageCircle, Plus, Trash2, FileArchive } from "lucide-react"
+import { toast } from "sonner"
+import KawaiiEyes from "./KawaiiEyes"
+import type { KawaiiEyesProps } from "./KawaiiEyesTypes"
+import JSZip from "jszip"
 
 const KawaiiEyesCustomizer: React.FC = () => {
   const [config, setConfig] = useState<KawaiiEyesProps>({
-    faceColor: '#FFC6D9',
-    eyeColor: '#FFFFFF',
-    pupilColor: '#000000',
-    faceShape: 'round',
-    pupilShape: 'round',
-    name: 'Mochi',
+    faceColor: "#FFC6D9",
+    eyeColor: "#FFFFFF",
+    pupilColor: "#000000",
+    faceShape: "round",
+    pupilShape: "round",
+    name: "Mochi",
     eyeDistance: 30,
     size: 200,
-    eyePlacement: 'center',
-    eyeMovement: 'together',
+    eyePlacement: "center",
+    eyeMovement: "together",
     hasBlush: true,
-    blushColor: '#FFA5B3',
+    blushColor: "#FFA5B3",
     hasBorder: true,
-    borderColor: '#000000',
+    borderColor: "#000000",
     borderWidth: 7,
     // Chat bubble properties
     enableChat: false,
     chatLines: [],
     chatInterval: 3000,
     chatLoop: true,
-    chatBubbleColor: '#FFFFFF',
-    chatTextColor: '#333333'
-  });
+    chatBubbleColor: "#FFFFFF",
+    chatTextColor: "#333333",
+  })
 
   // New state for managing chat input
-  const [newChatLine, setNewChatLine] = useState('');
+  const [newChatLine, setNewChatLine] = useState("")
 
   const colors = {
     faces: [
-      { name: 'Pink', value: '#FFC6D9' },
-      { name: 'Purple', value: '#D6BCFA' },
-      { name: 'Blue', value: '#A5C8FF' },
-      { name: 'Mint', value: '#A5E9D1' },
-      { name: 'Yellow', value: '#FFF2A8' },
-      { name: 'Peach', value: '#FFD6CC' },
+      { name: "Pink", value: "#FFC6D9" },
+      { name: "Purple", value: "#D6BCFA" },
+      { name: "Blue", value: "#A5C8FF" },
+      { name: "Mint", value: "#A5E9D1" },
+      { name: "Yellow", value: "#FFF2A8" },
+      { name: "Peach", value: "#FFD6CC" },
     ],
     eyes: [
-      { name: 'White', value: '#FFFFFF' },
-      { name: 'Cream', value: '#FFF5E0' },
-      { name: 'Light Blue', value: '#E6F4FF' },
-      { name: 'Light Pink', value: '#FFE6EE' },
+      { name: "White", value: "#FFFFFF" },
+      { name: "Cream", value: "#FFF5E0" },
+      { name: "Light Blue", value: "#E6F4FF" },
+      { name: "Light Pink", value: "#FFE6EE" },
     ],
     pupils: [
-      { name: 'Black', value: '#000000' },
-      { name: 'Blue', value: '#4F86F7' },
-      { name: 'Brown', value: '#8B4513' },
-      { name: 'Green', value: '#228B22' },
-      { name: 'Purple', value: '#9932CC' },
+      { name: "Black", value: "#000000" },
+      { name: "Blue", value: "#4F86F7" },
+      { name: "Brown", value: "#8B4513" },
+      { name: "Green", value: "#228B22" },
+      { name: "Purple", value: "#9932CC" },
     ],
     blush: [
-      { name: 'Pink', value: '#FFA5B3' },
-      { name: 'Red', value: '#FF6B6B' },
-      { name: 'Orange', value: '#FFA07A' },
-      { name: 'Purple', value: '#D8B4FE' },
+      { name: "Pink", value: "#FFA5B3" },
+      { name: "Red", value: "#FF6B6B" },
+      { name: "Orange", value: "#FFA07A" },
+      { name: "Purple", value: "#D8B4FE" },
     ],
     borders: [
-      { name: 'Black', value: '#000000' },
-      { name: 'Brown', value: '#8B4513' },
-      { name: 'Gray', value: '#808080' },
-      { name: 'Pink', value: '#FF69B4' },
+      { name: "Black", value: "#000000" },
+      { name: "Brown", value: "#8B4513" },
+      { name: "Gray", value: "#808080" },
+      { name: "Pink", value: "#FF69B4" },
     ],
     bubbles: [
-      { name: 'White', value: '#FFFFFF' },
-      { name: 'Light Blue', value: '#E6F4FF' },
-      { name: 'Light Pink', value: '#FFE6EE' },
-      { name: 'Light Yellow', value: '#FFFEE0' },
-      { name: 'Light Purple', value: '#F3E8FF' },
-      { name: 'Light Green', value: '#E7F9EF' },
+      { name: "White", value: "#FFFFFF" },
+      { name: "Light Blue", value: "#E6F4FF" },
+      { name: "Light Pink", value: "#FFE6EE" },
+      { name: "Light Yellow", value: "#FFFEE0" },
+      { name: "Light Purple", value: "#F3E8FF" },
+      { name: "Light Green", value: "#E7F9EF" },
     ],
     text: [
-      { name: 'Black', value: '#333333' },
-      { name: 'Dark Blue', value: '#2C3E50' },
-      { name: 'Dark Purple', value: '#4A235A' },
-      { name: 'Dark Green', value: '#1E4620' },
-      { name: 'Dark Pink', value: '#971249' },
-    ]
-  };
+      { name: "Black", value: "#333333" },
+      { name: "Dark Blue", value: "#2C3E50" },
+      { name: "Dark Purple", value: "#4A235A" },
+      { name: "Dark Green", value: "#1E4620" },
+      { name: "Dark Pink", value: "#971249" },
+    ],
+  }
 
   const faceShapes = [
-    { name: 'Round', value: 'round', icon: Circle },
-    { name: 'Square', value: 'square', icon: Square },
-    { name: 'Heart', value: 'heart', icon: Heart },
-  ];
+    { name: "Round", value: "round", icon: Circle },
+    { name: "Square", value: "square", icon: Square },
+    { name: "Heart", value: "heart", icon: Heart },
+    { name: "Ghost", value: "ghost", icon: Circle },
+  ]
 
   const animatedFaceShapes = [
-    { name: 'Blob', value: 'blob', icon: Circle },
-    { name: 'Bounce', value: 'bounce', icon: Circle },
-    { name: 'Pulse', value: 'pulse', icon: Circle },
-    { name: 'Wave', value: 'wave', icon: Circle },
-    { name: 'Jiggle', value: 'jiggle', icon: Circle },
-  ];
+    { name: "Blob", value: "blob", icon: Circle },
+    { name: "Bounce", value: "bounce", icon: Circle },
+    { name: "Pulse", value: "pulse", icon: Circle },
+    { name: "Wave", value: "wave", icon: Circle },
+    { name: "Jiggle", value: "jiggle", icon: Circle },
+  ]
 
   const pupilShapes = [
-    { name: 'Round', value: 'round', icon: Circle },
-    { name: 'Heart', value: 'heart', icon: Heart },
-    { name: 'Star', value: 'star', icon: Star },
-    { name: 'Diamond', value: 'diamond', icon: Diamond },
-  ];
-  
+    { name: "Round", value: "round", icon: Circle },
+    { name: "Heart", value: "heart", icon: Heart },
+    { name: "Star", value: "star", icon: Star },
+    { name: "Diamond", value: "diamond", icon: Diamond },
+  ]
+
   const eyePlacements = [
-    { name: 'Left', value: 'left' },
-    { name: 'Center', value: 'center' },
-    { name: 'Right', value: 'right' },
-  ];
-  
+    { name: "Left", value: "left" },
+    { name: "Center", value: "center" },
+    { name: "Right", value: "right" },
+  ]
+
   const eyeMovements = [
-    { name: 'Together', value: 'together' },
-    { name: 'Opposite', value: 'opposite' },
-  ];
+    { name: "Together", value: "together" },
+    { name: "Opposite", value: "opposite" },
+  ]
 
   // Add hover expressions
-  const hoverExpressions = [
-    '>_<',
-    '^_^',
-    '>w<',
-    '>.<',
-    '>3<',
-    '>o<',
-    '>u<',
-    '>n<'
-  ];
+  const hoverExpressions = [">_<", "^_^", ">w<", ">.<", ">3<", ">o<", ">u<", ">n<"]
 
   const handleChange = (key: keyof KawaiiEyesProps, value: any) => {
-    setConfig(prev => ({ ...prev, [key]: value }));
-  };
+    setConfig((prev) => ({ ...prev, [key]: value }))
+  }
 
   // Add a chat line
   const addChatLine = () => {
-    if (newChatLine.trim() === '') return;
+    if (newChatLine.trim() === "") return
 
-    setConfig(prev => ({
+    setConfig((prev) => ({
       ...prev,
-      chatLines: [...prev.chatLines, newChatLine.trim()]
-    }));
-    setNewChatLine('');
-    
+      chatLines: [...prev.chatLines, newChatLine.trim()],
+    }))
+    setNewChatLine("")
+
     if (!config.enableChat) {
       // Enable chat if adding the first line
-      handleChange('enableChat', true);
+      handleChange("enableChat", true)
     }
-    
-    toast.success('Chat line added!');
-  };
+
+    toast.success("Chat line added!")
+  }
 
   // Remove a chat line
   const removeChatLine = (index: number) => {
-    setConfig(prev => ({
+    setConfig((prev) => ({
       ...prev,
-      chatLines: prev.chatLines.filter((_, i) => i !== index)
-    }));
-    
-    toast.success('Chat line removed!');
-  };
+      chatLines: prev.chatLines.filter((_, i) => i !== index),
+    }))
+
+    toast.success("Chat line removed!")
+  }
 
   // Component for color selector with preset colors and a color picker
-  const ColorSelector = ({ 
-    value, 
-    onChange, 
-    colorOptions, 
-    label 
-  }: { 
-    value: string; 
-    onChange: (color: string) => void; 
-    colorOptions: { name: string; value: string }[];
-    label: string;
+  const ColorSelector = ({
+    value,
+    onChange,
+    colorOptions,
+    label,
+  }: {
+    value: string
+    onChange: (color: string) => void
+    colorOptions: { name: string; value: string }[]
+    label: string
   }) => {
     return (
       <div>
@@ -193,16 +187,15 @@ const KawaiiEyesCustomizer: React.FC = () => {
               className="h-12 w-full p-0 relative"
               onClick={() => onChange(color.value)}
             >
-              <div 
-                className="absolute inset-2 rounded-sm" 
-                style={{ backgroundColor: color.value }}
-              ></div>
+              <div className="absolute inset-2 rounded-sm" style={{ backgroundColor: color.value }}></div>
               <span className="sr-only">{color.name}</span>
             </Button>
           ))}
         </div>
         <div className="flex items-center gap-2">
-          <Label htmlFor={`custom-${label.toLowerCase()}`} className="whitespace-nowrap">Custom:</Label>
+          <Label htmlFor={`custom-${label.toLowerCase()}`} className="whitespace-nowrap">
+            Custom:
+          </Label>
           <Input
             id={`custom-${label.toLowerCase()}`}
             type="color"
@@ -221,8 +214,8 @@ const KawaiiEyesCustomizer: React.FC = () => {
           </div>
         </div>
       </div>
-    );
-  };
+    )
+  }
 
   const generateComponentCode = () => {
     return `import React, { useState, useEffect, useRef } from 'react';
@@ -422,18 +415,34 @@ const KawaiiEyes = () => {
         return \`\${baseStyle} border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; animation: blob 15s ease-in-out infinite;\`;
       case 'heart': 
         return \`\${baseStyle} position: relative; transform: rotate(-45deg) scale(0.8);\`;
-      case 'bounce':
-        return \`\${baseStyle} border-radius: 50%; animation: bounce 6s ease-in-out infinite;\`;
-      case 'pulse':
-        return \`\${baseStyle} border-radius: 50%; animation: pulse 6s ease-in-out infinite;\`;
-      case 'wave':
-        return \`\${baseStyle} border-radius: 50%; animation: wave 7s ease-in-out infinite;\`;
-      case 'jiggle':
-        return \`\${baseStyle} border-radius: 50%; animation: jiggle 6s ease-in-out infinite;\`;
-      default:
-        return \`\${baseStyle} border-radius: 50%;\`;
+      case 'ghost':
+        return \`\${baseStyle} 
+    border-radius: 40% 40% 0 0;
+    &:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 25%;
+      background-color: inherit;
+      border-bottom-left-radius: 40% 50%;
+      border-bottom-right-radius: 40% 50%;
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 75% 85%, 50% 100%, 25% 85%, 0 100%);
     }
-  };
+  \`;
+    case 'bounce':
+      return \`\${baseStyle} border-radius: 50%; animation: bounce 6s ease-in-out infinite;\`;
+    case 'pulse':
+      return \`\${baseStyle} border-radius: 50%; animation: pulse 6s ease-in-out infinite;\`;
+    case 'wave':
+      return \`\${baseStyle} border-radius: 50%; animation: wave 7s ease-in-out infinite;\`;
+    case 'jiggle':
+      return \`\${baseStyle} border-radius: 50%; animation: jiggle 6s ease-in-out infinite;\`;
+    default:
+      return \`\${baseStyle} border-radius: 50%;\`;
+  }
+};
 
   // Get eye position based on placement
   const getEyePosition = () => {
@@ -749,42 +758,42 @@ const KawaiiEyes = () => {
 };
 
 export default KawaiiEyes;
-`;
-  };
+`
+  }
 
   const downloadAsZip = async () => {
-    const zip = new JSZip();
-    
+    const zip = new JSZip()
+
     // Add the main component file
-    zip.file("KawaiiEyes.tsx", generateComponentCode());
-    
+    zip.file("KawaiiEyes.tsx", generateComponentCode())
+
     // Add the types file
-    zip.file("KawaiiEyesTypes.ts", generateTypesCode());
-    
+    zip.file("KawaiiEyesTypes.ts", generateTypesCode())
+
     // Add the CSS file
-    zip.file("shapes.css", generateCssCode());
-    
+    zip.file("shapes.css", generateCssCode())
+
     // Add a README file
-    zip.file("README.md", generateReadmeCode());
-    
+    zip.file("README.md", generateReadmeCode())
+
     // Generate and download the zip
-    const content = await zip.generateAsync({ type: "blob" });
-    const url = window.URL.createObjectURL(content);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "kawaii-eyes-component.zip";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(url);
-  };
+    const content = await zip.generateAsync({ type: "blob" })
+    const url = window.URL.createObjectURL(content)
+    const link = document.createElement("a")
+    link.href = url
+    link.download = "kawaii-eyes-component.zip"
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    window.URL.revokeObjectURL(url)
+  }
 
   const generateTypesCode = () => {
     return `export interface KawaiiEyesProps {
       faceColor: string;
       eyeColor: string;
       pupilColor: string;
-      faceShape: 'round' | 'square' | 'blob' | 'heart' | 'bounce' | 'pulse' | 'wave' | 'jiggle';
+      faceShape: 'round' | 'square' | 'blob' | 'heart' | 'bounce' | 'pulse' | 'wave' | 'jiggle' | 'ghost';
       pupilShape: 'round' | 'heart' | 'star' | 'diamond';
       name: string;
       eyeDistance: number;
@@ -803,8 +812,8 @@ export default KawaiiEyes;
       chatLoop: boolean;
       chatBubbleColor: string;
       chatTextColor: string;
-    }`;
-  };
+    }`
+  }
 
   const generateCssCode = () => {
     return `@keyframes blob {
@@ -881,8 +890,8 @@ export default KawaiiEyes;
       height: 100%;
       top: 0;
       right: -50%;
-    }`;
-  };
+    }`
+  }
 
   const generateReadmeCode = () => {
     return `# Kawaii Eyes Component
@@ -930,8 +939,8 @@ See the \`KawaiiEyesTypes.ts\` file for a complete list of available props.
 
 ## License
 
-MIT`;
-  };
+MIT`
+  }
 
   return (
     <div className="w-full max-w-[1280px] mx-auto">
@@ -942,7 +951,7 @@ MIT`;
             <span className="px-3 py-1 text-xs font-medium text-primary-foreground bg-primary rounded-full mb-2 inline-block animate-fade-in">
               Live Preview
             </span>
-            <h2 className="text-2xl font-medium mt-2">{config.name || 'Kawaii Eyes'}</h2>
+            <h2 className="text-2xl font-medium mt-2">{config.name || "Kawaii Eyes"}</h2>
           </div>
           <div className="flex items-center justify-center p-4 min-h-[300px]">
             <KawaiiEyes {...config} />
@@ -950,26 +959,23 @@ MIT`;
           <div className="mt-8 flex flex-col sm:flex-row gap-4 w-full justify-center">
             <Button
               onClick={() => {
-                const code = generateComponentCode();
-                const blob = new Blob([code], { type: 'text/plain' });
-                const url = window.URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = 'KawaiiEyes.tsx';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                window.URL.revokeObjectURL(url);
+                const code = generateComponentCode()
+                const blob = new Blob([code], { type: "text/plain" })
+                const url = window.URL.createObjectURL(blob)
+                const link = document.createElement("a")
+                link.href = url
+                link.download = "KawaiiEyes.tsx"
+                document.body.appendChild(link)
+                link.click()
+                document.body.removeChild(link)
+                window.URL.revokeObjectURL(url)
               }}
               className="flex items-center gap-2"
             >
               <Code className="h-4 w-4" />
               Download as single component
             </Button>
-            <Button
-              onClick={downloadAsZip}
-              className="flex items-center gap-2"
-            >
+            <Button onClick={downloadAsZip} className="flex items-center gap-2">
               <FileArchive className="h-4 w-4" />
               Download split components
             </Button>
@@ -995,10 +1001,10 @@ MIT`;
               <div className="space-y-4">
                 <div>
                   <Label htmlFor="name">Name</Label>
-                  <Input 
-                    id="name" 
-                    value={config.name} 
-                    onChange={(e) => handleChange('name', e.target.value)}
+                  <Input
+                    id="name"
+                    value={config.name}
+                    onChange={(e) => handleChange("name", e.target.value)}
                     placeholder="Enter a cute name"
                     className="mt-1"
                   />
@@ -1008,9 +1014,9 @@ MIT`;
                     <Label>Size</Label>
                     <span className="text-sm text-muted-foreground">{config.size}px</span>
                   </div>
-                  <Slider 
-                    value={[config.size]} 
-                    onValueChange={(value) => handleChange('size', value[0])}
+                  <Slider
+                    value={[config.size]}
+                    onValueChange={(value) => handleChange("size", value[0])}
                     min={100}
                     max={400}
                     step={10}
@@ -1022,18 +1028,14 @@ MIT`;
             <TabsContent value="shape" className="space-y-6">
               <div>
                 <Label className="mb-3 block">Face Shape</Label>
-                <RadioGroup 
-                  value={config.faceShape} 
-                  onValueChange={(value) => handleChange('faceShape', value)}
+                <RadioGroup
+                  value={config.faceShape}
+                  onValueChange={(value) => handleChange("faceShape", value)}
                   className="grid grid-cols-4 gap-4"
                 >
                   {faceShapes.map((shape) => (
                     <div key={shape.value} className="text-center">
-                      <RadioGroupItem
-                        value={shape.value}
-                        id={`shape-${shape.value}`}
-                        className="peer sr-only"
-                      />
+                      <RadioGroupItem value={shape.value} id={`shape-${shape.value}`} className="peer sr-only" />
                       <Label
                         htmlFor={`shape-${shape.value}`}
                         className="flex items-center justify-center rounded-lg border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
@@ -1050,28 +1052,29 @@ MIT`;
 
               <div>
                 <Label className="mb-3 block">Animated Face Shapes</Label>
-                <RadioGroup 
-                  value={config.faceShape} 
-                  onValueChange={(value) => handleChange('faceShape', value)}
+                <RadioGroup
+                  value={config.faceShape}
+                  onValueChange={(value) => handleChange("faceShape", value)}
                   className="grid grid-cols-5 gap-4"
                 >
                   {animatedFaceShapes.map((shape) => (
                     <div key={shape.value} className="text-center">
-                      <RadioGroupItem
-                        value={shape.value}
-                        id={`shape-${shape.value}`}
-                        className="peer sr-only"
-                      />
+                      <RadioGroupItem value={shape.value} id={`shape-${shape.value}`} className="peer sr-only" />
                       <Label
                         htmlFor={`shape-${shape.value}`}
                         className="flex items-center justify-center rounded-lg border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
                       >
-                        <div className={`w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center ${
-                          shape.value === 'blob' ? 'animate-blob' :
-                          shape.value === 'bounce' ? 'animate-bounce' :
-                          shape.value === 'pulse' ? 'animate-pulse' :
-                          'animate-jiggle'
-                        }`}>
+                        <div
+                          className={`w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center ${
+                            shape.value === "blob"
+                              ? "animate-blob"
+                              : shape.value === "bounce"
+                                ? "animate-bounce"
+                                : shape.value === "pulse"
+                                  ? "animate-pulse"
+                                  : "animate-jiggle"
+                          }`}
+                        >
                           <Circle className="h-6 w-6" />
                         </div>
                         <span className="ml-2">{shape.name}</span>
@@ -1083,18 +1086,14 @@ MIT`;
 
               <div>
                 <Label className="mb-3 block">Pupil Shape</Label>
-                <RadioGroup 
-                  value={config.pupilShape} 
-                  onValueChange={(value) => handleChange('pupilShape', value)}
+                <RadioGroup
+                  value={config.pupilShape}
+                  onValueChange={(value) => handleChange("pupilShape", value)}
                   className="grid grid-cols-4 gap-4"
                 >
                   {pupilShapes.map((shape) => (
                     <div key={shape.value} className="text-center">
-                      <RadioGroupItem
-                        value={shape.value}
-                        id={`pupil-${shape.value}`}
-                        className="peer sr-only"
-                      />
+                      <RadioGroupItem value={shape.value} id={`pupil-${shape.value}`} className="peer sr-only" />
                       <Label
                         htmlFor={`pupil-${shape.value}`}
                         className="flex items-center justify-center rounded-lg border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
@@ -1116,20 +1115,20 @@ MIT`;
                   <Label>Eye Distance</Label>
                   <span className="text-sm text-muted-foreground">{config.eyeDistance}%</span>
                 </div>
-                <Slider 
-                  value={[config.eyeDistance]} 
-                  onValueChange={(value) => handleChange('eyeDistance', value[0])}
+                <Slider
+                  value={[config.eyeDistance]}
+                  onValueChange={(value) => handleChange("eyeDistance", value[0])}
                   min={20}
                   max={60}
                   step={1}
                 />
               </div>
-              
+
               <div className="mt-6">
                 <Label className="mb-3 block">Eye Placement</Label>
-                <RadioGroup 
-                  value={config.eyePlacement} 
-                  onValueChange={(value) => handleChange('eyePlacement', value)}
+                <RadioGroup
+                  value={config.eyePlacement}
+                  onValueChange={(value) => handleChange("eyePlacement", value)}
                   className="grid grid-cols-3 gap-4"
                 >
                   {eyePlacements.map((placement) => (
@@ -1149,12 +1148,12 @@ MIT`;
                   ))}
                 </RadioGroup>
               </div>
-              
+
               <div className="mt-6">
                 <Label className="mb-3 block">Eye Movement</Label>
-                <RadioGroup 
-                  value={config.eyeMovement} 
-                  onValueChange={(value) => handleChange('eyeMovement', value)}
+                <RadioGroup
+                  value={config.eyeMovement}
+                  onValueChange={(value) => handleChange("eyeMovement", value)}
                   className="grid grid-cols-2 gap-4"
                 >
                   {eyeMovements.map((movement) => (
@@ -1177,24 +1176,24 @@ MIT`;
             </TabsContent>
 
             <TabsContent value="color" className="space-y-6">
-              <ColorSelector 
+              <ColorSelector
                 label="Face Color"
                 value={config.faceColor}
-                onChange={(color) => handleChange('faceColor', color)}
+                onChange={(color) => handleChange("faceColor", color)}
                 colorOptions={colors.faces}
               />
 
-              <ColorSelector 
+              <ColorSelector
                 label="Eye Color"
                 value={config.eyeColor}
-                onChange={(color) => handleChange('eyeColor', color)}
+                onChange={(color) => handleChange("eyeColor", color)}
                 colorOptions={colors.eyes}
               />
 
-              <ColorSelector 
+              <ColorSelector
                 label="Pupil Color"
                 value={config.pupilColor}
-                onChange={(color) => handleChange('pupilColor', color)}
+                onChange={(color) => handleChange("pupilColor", color)}
                 colorOptions={colors.pupils}
               />
             </TabsContent>
@@ -1202,52 +1201,56 @@ MIT`;
             <TabsContent value="style" className="space-y-6">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="has-blush" className="cursor-pointer">Blush</Label>
-                  <Switch 
-                    id="has-blush" 
+                  <Label htmlFor="has-blush" className="cursor-pointer">
+                    Blush
+                  </Label>
+                  <Switch
+                    id="has-blush"
                     checked={config.hasBlush}
-                    onCheckedChange={(checked) => handleChange('hasBlush', checked)}
+                    onCheckedChange={(checked) => handleChange("hasBlush", checked)}
                   />
                 </div>
-                
+
                 {config.hasBlush && (
                   <div className="mt-4 pl-4 border-l-2 border-muted">
-                    <ColorSelector 
+                    <ColorSelector
                       label="Blush Color"
                       value={config.blushColor}
-                      onChange={(color) => handleChange('blushColor', color)}
+                      onChange={(color) => handleChange("blushColor", color)}
                       colorOptions={colors.blush}
                     />
                   </div>
                 )}
-                
+
                 <div className="pt-4">
                   <div className="flex items-center justify-between">
-                    <Label htmlFor="has-border" className="cursor-pointer">Border</Label>
-                    <Switch 
-                      id="has-border" 
+                    <Label htmlFor="has-border" className="cursor-pointer">
+                      Border
+                    </Label>
+                    <Switch
+                      id="has-border"
                       checked={config.hasBorder}
-                      onCheckedChange={(checked) => handleChange('hasBorder', checked)}
+                      onCheckedChange={(checked) => handleChange("hasBorder", checked)}
                     />
                   </div>
-                  
+
                   {config.hasBorder && (
                     <div className="mt-4 pl-4 border-l-2 border-muted space-y-4">
-                      <ColorSelector 
+                      <ColorSelector
                         label="Border Color"
                         value={config.borderColor}
-                        onChange={(color) => handleChange('borderColor', color)}
+                        onChange={(color) => handleChange("borderColor", color)}
                         colorOptions={colors.borders}
                       />
-                      
+
                       <div>
                         <div className="flex justify-between items-center mb-2">
                           <Label>Border Width</Label>
                           <span className="text-sm text-muted-foreground">{config.borderWidth}px</span>
                         </div>
-                        <Slider 
-                          value={[config.borderWidth]} 
-                          onValueChange={(value) => handleChange('borderWidth', value[0])}
+                        <Slider
+                          value={[config.borderWidth]}
+                          onValueChange={(value) => handleChange("borderWidth", value[0])}
                           min={1}
                           max={10}
                           step={1}
@@ -1263,11 +1266,13 @@ MIT`;
             <TabsContent value="chat" className="space-y-6">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="enable-chat" className="cursor-pointer">Enable Chat Bubble</Label>
-                  <Switch 
-                    id="enable-chat" 
+                  <Label htmlFor="enable-chat" className="cursor-pointer">
+                    Enable Chat Bubble
+                  </Label>
+                  <Switch
+                    id="enable-chat"
                     checked={config.enableChat}
-                    onCheckedChange={(checked) => handleChange('enableChat', checked)}
+                    onCheckedChange={(checked) => handleChange("enableChat", checked)}
                   />
                 </div>
 
@@ -1278,28 +1283,24 @@ MIT`;
                       <Label className="mb-3 block">Chat Messages</Label>
                       <div className="flex items-end gap-2 mb-3">
                         <div className="flex-1">
-                          <Input 
-                            value={newChatLine} 
+                          <Input
+                            value={newChatLine}
                             onChange={(e) => setNewChatLine(e.target.value)}
                             placeholder="Type a chat message..."
                           />
                         </div>
-                        <Button 
-                          onClick={addChatLine}
-                          size="icon"
-                          disabled={!newChatLine.trim()}
-                        >
+                        <Button onClick={addChatLine} size="icon" disabled={!newChatLine.trim()}>
                           <Plus className="h-4 w-4" />
                         </Button>
                       </div>
 
                       {/* Chat Messages List */}
-                      <div className={`space-y-2 my-3 ${config.chatLines.length === 0 ? 'hidden' : ''}`}>
+                      <div className={`space-y-2 my-3 ${config.chatLines.length === 0 ? "hidden" : ""}`}>
                         {config.chatLines.map((line, index) => (
                           <div key={index} className="flex items-center justify-between p-2 bg-muted/40 rounded-md">
                             <p className="text-sm truncate flex-1 pr-2">{line}</p>
-                            <Button 
-                              variant="ghost" 
+                            <Button
+                              variant="ghost"
                               size="icon"
                               onClick={() => removeChatLine(index)}
                               className="h-8 w-8"
@@ -1323,40 +1324,44 @@ MIT`;
                     <div>
                       <div className="flex justify-between items-center mb-2">
                         <Label>Message Interval</Label>
-                        <span className="text-sm text-muted-foreground">{(config.chatInterval / 1000).toFixed(1)}s</span>
+                        <span className="text-sm text-muted-foreground">
+                          {(config.chatInterval / 1000).toFixed(1)}s
+                        </span>
                       </div>
-                      <Slider 
-                        value={[config.chatInterval]} 
-                        onValueChange={(value) => handleChange('chatInterval', value[0])}
+                      <Slider
+                        value={[config.chatInterval]}
+                        onValueChange={(value) => handleChange("chatInterval", value[0])}
                         min={1000}
                         max={10000}
                         step={500}
                       />
                     </div>
-                    
+
                     {/* Loop Option */}
                     <div className="flex items-center justify-between">
-                      <Label htmlFor="chat-loop" className="cursor-pointer">Loop Messages</Label>
-                      <Switch 
-                        id="chat-loop" 
+                      <Label htmlFor="chat-loop" className="cursor-pointer">
+                        Loop Messages
+                      </Label>
+                      <Switch
+                        id="chat-loop"
                         checked={config.chatLoop}
-                        onCheckedChange={(checked) => handleChange('chatLoop', checked)}
+                        onCheckedChange={(checked) => handleChange("chatLoop", checked)}
                       />
                     </div>
 
                     {/* Bubble Color */}
-                    <ColorSelector 
+                    <ColorSelector
                       label="Bubble Color"
                       value={config.chatBubbleColor}
-                      onChange={(color) => handleChange('chatBubbleColor', color)}
+                      onChange={(color) => handleChange("chatBubbleColor", color)}
                       colorOptions={colors.bubbles}
                     />
 
                     {/* Text Color */}
-                    <ColorSelector 
+                    <ColorSelector
                       label="Text Color"
                       value={config.chatTextColor}
-                      onChange={(color) => handleChange('chatTextColor', color)}
+                      onChange={(color) => handleChange("chatTextColor", color)}
                       colorOptions={colors.text}
                     />
                   </div>
@@ -1367,7 +1372,8 @@ MIT`;
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default KawaiiEyesCustomizer;
+export default KawaiiEyesCustomizer
+
